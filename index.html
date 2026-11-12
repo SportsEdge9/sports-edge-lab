@@ -1182,6 +1182,13 @@ function selectedSports(){return state.sport==='ALL'?Object.keys(SOURCES):[state
 function currentGames(){return state.games.filter(g=>state.sport==='ALL'||g.sport===state.sport)}
 function chooseGame(g,go){
   if(!g)return;
+  // V14 deployment navigation bridge: the locked Bills/Jets demo has its
+  // own approved standalone Pregame Center. Other sports continue to use
+  // the existing sport-specific Game Center until final integration.
+  if(g.id==='demo-nfl'&&g.sport==='NFL'&&g.away?.abbr==='BUF'&&g.home?.abbr==='NYJ'&&g.state==='pre'){
+    window.location.assign('pregame.html');
+    return;
+  }
   const current=state.model;
   if(current&&(current.sport!==g.sport||current.away!==g.away.name||current.home!==g.home.name))state.model=null;
   state.selected=g;state.statsGame=g;state.inGameMode='pregame';
