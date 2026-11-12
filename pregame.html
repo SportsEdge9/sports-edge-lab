@@ -51,6 +51,77 @@
 .fv-caveat{font-size:10px;color:#9ec4db;line-height:1.45;margin-top:7px}
 @media(max-width:370px){.fv-metrics{grid-template-columns:repeat(3,minmax(0,1fr))}.fv-cell b{font-size:17px}.fv-cell h3{font-size:9px}}
 @media(min-width:700px){.fv-cell b{font-size:26px}.fv-advanced-cell b{font-size:18px}}
+
+/* V14 responsive alignment patch — visual styles and module order remain unchanged.
+   A narrow phone can activate the Tablet prototype toggle; avoid expanding the
+   tablet typography beyond the available viewport in that case. At >=700px,
+   the approved tablet layout and sizing are unchanged. */
+@media (max-width:699px) {
+  .app.tablet .section-title { flex-wrap:wrap; align-content:center; row-gap:5px; }
+  .app.tablet .section-title strong {
+    flex:1 1 100%; min-width:0; font-size:15px; white-space:normal;
+    overflow-wrap:normal; line-height:1.18;
+  }
+  .app.tablet .section-title span {
+    margin-left:auto; white-space:normal; font-size:9px; line-height:1.2;
+  }
+  .app.tablet .hero { gap:5px; padding:8px 5px; grid-template-columns:minmax(0,1fr) minmax(0,1fr); }
+  .app.tablet .matchup { grid-template-columns:minmax(0,1fr) 22px minmax(0,1fr); padding-right:4px; }
+  .app.tablet .team img { height:55px; }
+  .app.tablet .team-name { font-size:12px; line-height:1.05; }
+  .app.tablet .team-record { font-size:10px; }
+  .app.tablet .vstext { font-size:15px; }
+  .app.tablet .weather { padding:4px 3px; }
+  .app.tablet .weather h3 { font-size:10px; line-height:1.25; white-space:normal; overflow-wrap:normal; }
+  .app.tablet .weather-major { padding:2px 0; grid-template-columns:1fr 1fr 1fr; gap:2px; }
+  .app.tablet .snowcloud { font-size:22px; }
+  .app.tablet .big-temp { font-size:25px; }
+  .app.tablet .minor { font-size:9px; }
+  .app.tablet .minor strong { font-size:14px; }
+  .app.tablet .weather-tags { gap:2px; }
+  .app.tablet .weather-tags span { padding:2px; font-size:9px; }
+  .app.tablet .weather-footer { font-size:9px; }
+  .app.tablet .mini-row { gap:5px; }
+  .app.tablet .mini-card { min-height:65px; padding:8px 3px; }
+  .app.tablet .mini-card h3 { font-size:11px; }
+  .app.tablet .projected { gap:5px; }
+  .app.tablet .projected strong { font-size:14px; }
+  .app.tablet .weather-impact { font-size:9px; white-space:normal; }
+  .app.tablet .best-edge { min-height:78px; }
+  .app.tablet .edge-pick b { font-size:17px; }
+  .app.tablet .confidence strong { font-size:17px; }
+  .app.tablet .panel { padding:10px; }
+  .app.tablet .panel h2 { font-size:15px; flex-wrap:wrap; }
+  .app.tablet .model-output { padding:8px 2px; }
+  .app.tablet .model-output h3 { font-size:9px; }
+  .app.tablet .model-output .value { font-size:11px; white-space:normal; }
+  .app.tablet .odds-card { padding:7px 3px; }
+  .app.tablet .market { font-size:11px; white-space:normal; }
+  .app.tablet .movement { font-size:9px; white-space:normal; }
+  .app.tablet .analysis-list li, .app.tablet .inj { font-size:10px; }
+  .app.tablet .dual .panel { min-height:auto; }
+  .app.tablet .bottomnav button { font-size:10px; }
+  .app.tablet .bottomnav button span { font-size:22px; }
+  .app.tablet .table-row { font-size:9px; }
+  .app.tablet .table-head { font-size:8px; }
+  .app.tablet .model-output .value small { font-size:10px; }
+}
+
+/* V14 lower-panel legibility refinement, limited to Tablet preview on phone widths.
+   Genuine tablet widths (>=700px), normal Phone mode, and all behavior remain unchanged. */
+@media (max-width:699px) {
+  .app.tablet .dual { grid-template-columns:minmax(0,1fr); gap:8px; }
+  .app.tablet .dual .panel { min-width:0; }
+  .app.tablet .analysis-list li, .app.tablet .inj {font-size:12px;line-height:1.4;}
+  .app.tablet .dual .panel h2 {font-size:15px;}
+  .app.tablet .inj-heading {font-size:12px;}
+  .app.tablet .table-head,
+  .app.tablet .table-row {grid-template-columns:26% 18% 18% 17% 21%;}
+  .app.tablet .table-head {font-size:9px;}
+  .app.tablet .table-row {font-size:10px;}
+  .app.tablet .match-chips {gap:2px; font-size:10px;}
+  .app.tablet .chip {padding:4px 4px; font-size:10px;}
+}
 </style></head><body>
 <div class="frame-controls"><span>V14 MASTER CENTER</span><button id="phone" aria-pressed="true">Phone</button><button id="tablet" aria-pressed="false">Tablet</button></div>
 <div class="app" id="app">
