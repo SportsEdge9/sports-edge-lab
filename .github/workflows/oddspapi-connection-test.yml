@@ -1,0 +1,49 @@
+name: OddsPapi Secure Connection Test
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  test-account:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Validate OddsPapi API without using billable requests
+        env:
+          ODDSPAPI_API_KEY: ${{ secrets.ODDSPAPI_API_KEY }}
+        run: |
+          python - <<'PY'
+          import json
+          import os
+          import sys
+          from urllib.parse import urlencode
+          from urllib.request import Request, urlopen
+          from urllib.error import HTTPError, URLError
+
+          api_key = os.environ.get('ODDSPAPI_API_KEY', '').strip()
+          if not api_key:
+              sys.exit('FAIL: GitHub Actions secret ODDSPAPI_API_KEY was not found.')
+
+          url = 'https://api.oddspapi.io/v4/account?' + urlencode({'apiKey': api_key})
+          try:
+              with urlopen(Request(url, headers={'Accept': 'application/json'}), timeout=25) as response:
+                  data = json.load(response)
+          except HTTPError as e:
+              sys.exit('FAIL: OddsPapi returned HTTP ' + str(e.code) + '. No secret logged.')
+          except (URLError, TimeoutError, ValueError) as e:
+              sys.exit('FAIL: Could not validate the API response (' + type(e).__name__ + ').')
+
+          active = next((x for x in data.get('subscriptions', []) if x.get('is_active')), None)
+          if not active:
+              sys.exit('FAIL: Account responded, but no active subscription was found.')
+          print('PASS: API authentication succeeded.')
+          print('PASS: Active plan verified.')
+          print('Monthly requests used:', active.get('request_count', 'unknown'))
+          print('Monthly request limit:', active.get('request_limit', 'unknown'))
+          print('Available sportsbook count:', len(active.get('bookmakers') or {}))
+          print('Available sport count:', len(active.get('sport_ids') or []))
+          print('This test only calls the unmetered account endpoint.')
+          PY
