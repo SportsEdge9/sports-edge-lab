@@ -2,7 +2,10 @@ name: OddsPapi Secure Connection Test
 
 on:
   workflow_dispatch:
-
+  push:
+    branches: [v14-staging]
+    paths:
+      - '.github/workflows/oddspapi-connectiom-test.yml'
 permissions:
   contents: read
 
