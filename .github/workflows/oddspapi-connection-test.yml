@@ -5,7 +5,7 @@ on:
   push:
     branches: [v14-staging]
     paths:
-      - '.github/workflows/oddspapi-connectiom-test.yml'
+      - '.github/workflows/oddspapi-connection-test.yml'
 permissions:
   contents: read
 
