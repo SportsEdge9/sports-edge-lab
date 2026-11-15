@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Sports Edge Lab | Week 10 Automatic Results Tracker</title>
+<title>Sports Edge Lab | Week 10 Complete Model Test Tracker</title>
 <style>
 :root{color-scheme:dark;--bg:#07101e;--surface:#102039;--subsurface:#0b192c;--stroke:#28425d;--ink:#eff6ff;--muted:#9cb1c8;--cyan:#79c9ff;--mint:#75e0bb;--gold:#f9ca79;--red:#f68d93}
 *{box-sizing:border-box}body{background:var(--bg);color:var(--ink);font:14px/1.45 system-ui,-apple-system,Segoe UI,sans-serif;margin:0}
@@ -24,20 +24,54 @@ main{max-width:1190px;margin:0 auto;padding:20px 13px 70px}h1{font-size:clamp(25
 .manual-disclosure summary{cursor:pointer;padding:4px 0}
 .manual-disclosure .score-entry{margin:7px 0 0}
 @media(max-width:650px){.live-score{gap:7px}.live-score .live-tally{font-size:20px}}
+
+/* Recorded market and scoring research overlays. Core forecast data are unchanged. */
+.insights{border:1px solid #325774;border-radius:11px;margin:13px 0 12px;background:#0b1b30;padding:13px}
+.insight-title{font-weight:820;color:var(--cyan);font-size:12px;letter-spacing:.5px;text-transform:uppercase;margin:0 0 7px}
+.insight-help{font-size:11px;color:var(--muted);line-height:1.5;margin:0 0 13px}
+.insight-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:11px}
+.insight-block{background:#10253b;border:1px solid #27415e;border-radius:9px;padding:10px}
+.insight-block h4{font-size:13px;margin:0 0 8px;color:#eff6ff}
+.insight-row{display:flex;align-items:baseline;justify-content:space-between;gap:8px;padding:5px 0;border-top:1px solid #23405b;font-size:12px}
+.insight-row:first-of-type{border-top:none}
+.insight-row b{font-size:11px;color:#a6c9e5;flex:none}
+.insight-row span{text-align:right;min-width:0}
+.result-pill{display:inline-block;border:1px solid #476078;padding:1px 5px;border-radius:5px;margin-left:5px;color:#c8dcf0;font-size:10px;font-weight:700}
+.result-pill.w{color:#76e3ba;border-color:#318b72}
+.result-pill.l{color:#ff9da3;border-color:#bd5762}
+.research-details{margin-top:11px}
+.research-details summary{color:#e6d6b4;cursor:pointer;font-size:12px;font-weight:750;padding:6px 0}
+.research-details table{min-width:565px;font-size:12px;margin-top:4px}
+.research-details td,.research-details th{padding:7px 5px}
+.positive-research{color:#7fe4ba}.negative-research{color:#eeb0ab}
+.insight-aside{color:#aebed0;font-size:11px;line-height:1.5;margin:6px 0 0}
+@media(max-width:700px){.insights{padding:10px}.insight-grid{grid-template-columns:1fr}.insight-row{font-size:12px}.research-details table{min-width:555px}}
 </style></head><body><main>
-<header class="top"><div><div class="eyebrow">Sports Edge Lab · Beyond the Odds</div><h1>Week 10 · Auto-Score Test Tracker</h1><div class="muted">Sunday Nov 15 – Monday Nov 16, 2026 · ET · Scores from ESPN scoreboard feed</div></div>
+<header class="top"><div><div class="eyebrow">Sports Edge Lab · Beyond the Odds</div><h1>Week 10 · Complete Model Test Tracker</h1><div class="muted">Sunday Nov 15 – Monday Nov 16, 2026 · ET · Scores from ESPN scoreboard feed</div></div>
 <div class="actions"><a class="btn" href="https://www.nfl.com/scores/2026/reg/10" target="_blank" rel="noopener">Official NFL Scores ↗</a><button class="btn primary" id="refreshBtn" onclick="refreshScores()">Refresh Scores</button><button class="btn" onclick="exportCSV()">Export Results CSV</button></div></header>
-<div class="note"><strong>Official testing isolation:</strong> The nine original models are frozen; M0 and H1 are preserved research benchmarks. <b>M1 is excluded entirely</b> because its independent specialist run is being conducted separately. No forced moneyline picks, retrospectively created M1 forecasts, or fresh odds have been injected here.</div>
+<div class="note"><strong>Official testing isolation:</strong> The nine original models are frozen; M0 and H1 are preserved research benchmarks. <b>Original market-only M1 and forced favorites remain excluded.</b> This combined tracker preserves the complete <b>M0 spread audit and M0R shadow selections</b> and adds the independent football-formula <b>M1-FB v0.1</b> as series 12. M1-FB has 12 pre-kickoff research forecasts eligible for prospective scoring; NE @ DET is included as a pre-Week-10-data <b>retrospective replay</b> and is excluded from prospective win/loss and Brier.</div>
+<section class="panel" id="m0Audit" style="border-color:#6a5f45;background:#172433">
+<h2>M0 Spread Specialist — pregame ATS audit</h2>
+<p class="muted"><strong>13 archived win-probability values recovered; 0 verified original against-the-spread selections.</strong> M0 v0.2 was saved as a market-derived win-probability benchmark. The retained 13-game output contains no distinct M0 projected margin, cover probability or side-against-spread. Its earlier ZIP archive was not accessible for deeper verification. The saved FanDuel spreads below are quotes, <b>not M0's selections</b>.</p>
+<p class="muted">Accordingly, M0 is <b>not scored for ATS</b>. This is an archive-availability status, <b>not a model PASS</b>. Its original winner probability remains tracked separately. A separate M0R emergency ATS shadow run has been created using the original pregame screenshot lines; its output is clearly tagged and Detroit is excluded from prospective grading. The original M0 v0.2 has still not been executed.</p>
+</section>
+<section class="panel" style="border-color:#437d83"><h2>Emergency M0R ATS shadow — locked 2026-11-15T15:32:08Z</h2><p class="muted">13 research selections from archived FanDuel spread + price and moneyline, using a fixed unvalidated 13.86-point margin dispersion assumption. This is <b>NOT the recovered original M0 v0.2 engine</b>, not a certified +EV edge, and not a recorded bet. NE @ DET uses DET −2.5 corroborated by pregame reports, but the shadow selection was generated after 9:30 AM kickoff and is excluded from prospective grading. The other 12 are timestamped before their scheduled starts.</p><div class="scoretable"><table><thead><tr><th>M0R shadow</th><th>Pregame ATS side</th><th>Price</th><th>Research cover P</th><th>Grading status</th></tr></thead><tbody id="m0rScoreboard"></tbody></table></div></section><section class="panel" id="m1fbAudit" style="border-color:#376a8a"><h2>M1-FB · Independent football moneyline formula</h2><p class="muted"><strong>13 frozen formula predictions</strong>, using opponent-adjusted recent EPA/play and the Week 9 data cutoff. 2025 historical holdout: 144/224 winner accuracy (64.3%), Brier 0.2245 (research validation only). <strong>12 prospective research forecasts</strong> enter the M1-FB W/L and Brier tables. <strong>NE @ DET</strong> was calculated after kickoff using pre-Week-10 inputs; displayed as a replay only and never counted in M1-FB prospective accuracy. M0 and M0R are different spread/market research records. M1-FB uses no sportsbook odds to compute its football probabilities. No certified executable betting edges are claimed.</p></section>
 <div id="feedStatus" class="feedstatus" role="status" aria-live="polite">Connecting to the ESPN NFL scoreboard…</div>
-<div class="stats"><div class="stat"><strong>13</strong><small>Scheduled matchups</small></div><div class="stat"><strong>11</strong><small>Tracked comparison series</small></div><div class="stat"><strong id="done">0</strong><small>Final games graded</small></div><div class="stat"><strong id="waiting">13</strong><small>Awaiting final results</small></div></div>
+<div class="stats"><div class="stat"><strong>13</strong><small>Scheduled matchups</small></div><div class="stat"><strong>12</strong><small>Tracked comparison series</small></div><div class="stat"><strong id="done">0</strong><small>Final games graded</small></div><div class="stat"><strong id="waiting">13</strong><small>Awaiting final results</small></div></div>
 <section class="panel"><h2>Moneyline winner evaluation</h2><p class="muted">As games finish, the ESPN scoreboard feed updates win–loss records and Brier scores automatically while this page is open. Automatic results remain ESPN-sourced until cross-checked with the NFL. Lower Brier is better.</p><div class="scoretable"><table><thead><tr><th>Model</th><th>Type</th><th>Wins</th><th>Losses</th><th>Accuracy</th><th>Brier</th></tr></thead><tbody id="summary"></tbody></table></div></section>
-<section class="panel"><h2>Research spread & total comparisons</h2><p class="muted">Only models with preserved margin/total predictions are scored here. The FanDuel spread and total are historical screenshot lines, not verified live-executable prices.</p><div class="scoretable"><table><thead><tr><th>Model</th><th>Spread W–L–Push</th><th>Totals W–L–Push</th></tr></thead><tbody id="atsSummary"></tbody></table></div></section>
-<div class="section-head"><h2>Game-by-game test board</h2><span class="muted">Refresh every 60 seconds while open · manual backup available</span></div><div class="game-grid" id="games"></div>
-<p class="foot"><b>Integrity notes:</b> Scores are retrieved from the ESPN public scoreboard endpoint while this page is open. Final scores received from ESPN are graded automatically, with their source and refresh time preserved. Manual fallback entries are separately labeled and not NFL-certified. Original nine predictions were frozen ahead of kickoff; the H1 blend was also locked before kickoff, but is uncalibrated. M0 is a market-only spread-derived research baseline, not a separately calibrated ATS model. M0 and H1 are not independent football prediction models. Market lines come from your archived FanDuel screenshots and may be stale. No positive-EV bets are certified. Last retrieved ESPN scores and any manual fallback entries are cached locally in this browser. Offline or denied network access pauses updates; use Refresh Scores, check the data-source banner, or use the manual fallback. Export Results CSV to retain a portable copy.</p>
+<section class="panel"><h2>Research spread & total comparisons</h2><p class="muted">M0 is listed as UNVERIFIED ATS OUTPUT; only D/E/X1/X2 have saved scoring margins to derive and grade ATS research sides. FanDuel quotes are historical screenshot lines, not verified live-executable prices.</p><div class="scoretable"><table><thead><tr><th>Model</th><th>Spread W–L–Push</th><th>Totals W–L–Push</th></tr></thead><tbody id="atsSummary"></tbody></table></div></section>
+<div class="section-head" id="breakdowns"><h2>Game-by-game predictions, spreads, totals & price research</h2><span class="muted">Archived forecasts · auto-grade after ESPN finals</span></div>
+<p class="muted">All game cards include preserved margins (D/E/X1/X2) and totals (X1/X2), derived X1/X2 scorelines, and against-the-spread / over-under research calls. <b>They are not recorded wagers.</b> Opening “Moneyline price research” reveals the arithmetic comparison against screenshot moneylines. <b>No model has a certified +EV bet here.</b> These research calculations are being displayed now from the archived pregame inputs; they are not new pregame forecasts.</p><div class="game-grid" id="games"></div>
+<p class="foot"><b>Integrity notes:</b> This file combines the unuploaded M0 ATS audit / M0R emergency shadow HTML with frozen M1-FB v0.1 research. M0 and M0R are not conflated. The original GAMES and M0R_SHADOW source declarations remain byte-identical. M1-FB is scored on 12 prospective selections; Detroit is replay-only.  Scores are retrieved from the ESPN public scoreboard endpoint while this page is open. Final scores received from ESPN are graded automatically, with their source and refresh time preserved. Manual fallback entries are separately labeled and not NFL-certified. Projected scorelines and research lean calculations are derived only from original frozen margin/total values; they were not independently archived as separate forecasts. No certified positive EV bets are claimed. M0 has no verifiable original ATS selection in available archive and is NOT graded for ATS; this is not equivalent to a pass. Original nine predictions were frozen ahead of kickoff; the H1 blend was also locked before kickoff, but is uncalibrated. M0 is a market-only spread-derived research baseline, not a separately calibrated ATS model. M0 and H1 are not independent football prediction models. Market lines come from your archived FanDuel screenshots and may be stale. No positive-EV bets are certified. Last retrieved ESPN scores and any manual fallback entries are cached locally in this browser. Offline or denied network access pauses updates; use Refresh Scores, check the data-source banner, or use the manual fallback. Export Results CSV to retain a portable copy.</p>
 </main><script>
 const GAMES=[{"game_id":"2026_10_NE_DET","away":"NE","home":"DET","away_name":"Patriots","home_name":"Lions","kickoff_et":"2026-11-15T09:30:00-05:00","home_spread":-2.5,"total_line":49.5,"ml_away":124,"ml_home":-146,"market_source":"1000013135.jpg","models":{"A":0.59097179,"B":0.58121541,"C":0.58610205,"C_alt":0.57942738,"D":0.48604126,"E":0.50180719,"X1":0.40292932,"X2":0.39589379,"Z0":0.54605178,"M0":0.557,"H1":0.46033628},"projected_home_margin":{"D":0.14074769855583,"E":0.718896327007435,"X1":-0.3672,"X2":-0.2428},"projected_total":{"X1":39.4346,"X2":39.2577}},{"game_id":"2026_10_BUF_NYJ","away":"BUF","home":"NYJ","away_name":"Bills","home_name":"Jets","kickoff_et":"2026-11-15T13:00:00-05:00","home_spread":7.5,"total_line":50.5,"ml_away":-460,"ml_home":360,"market_source":"1000013137.jpg","models":{"A":0.14592232,"B":0.15688552,"C":0.15132235,"C_alt":0.15073564,"D":0.32071942,"E":0.30598985,"X1":0.28872389,"X2":0.27589127,"Z0":0.40689235,"M0":0.285,"H1":0.27953476},"projected_home_margin":{"D":-6.18338812627004,"E":-6.64991129702241,"X1":-3.2461,"X2":-3.0515},"projected_total":{"X1":47.1349,"X2":47.4556}},{"game_id":"2026_10_CAR_NO","away":"CAR","home":"NO","away_name":"Panthers","home_name":"Saints","kickoff_et":"2026-11-15T13:00:00-05:00","home_spread":-1.5,"total_line":48.5,"ml_away":114,"ml_home":-134,"market_source":"1000013135.jpg","models":{"A":0.58798436,"B":0.58723625,"C":0.58761036,"C_alt":0.59107364,"D":0.55076757,"E":0.54829232,"X1":0.51831901,"X2":0.49758256,"Z0":0.58673801,"M0":0.539,"H1":0.51414954},"projected_home_margin":{"D":2.50447003780543,"E":2.38274491958407,"X1":2.2753,"X2":1.8958},"projected_total":{"X1":47.5556,"X2":47.2671}},{"game_id":"2026_10_HOU_CLE","away":"HOU","home":"CLE","away_name":"Texans","home_name":"Browns","kickoff_et":"2026-11-15T13:00:00-05:00","home_spread":4.5,"total_line":40.5,"ml_away":-215,"ml_home":180,"market_source":"1000013137.jpg","models":{"A":0.40548051,"B":0.34717611,"C":0.37587877,"C_alt":0.43341446,"D":0.37090297,"E":0.36955412,"X1":0.39074687,"X2":0.37526849,"Z0":0.62590927,"M0":0.383,"H1":0.3783611},"projected_home_margin":{"D":-4.16107796570444,"E":-4.10965111246031,"X1":-0.6555,"X2":-0.6938},"projected_total":{"X1":47.3846,"X2":47.4418}},{"game_id":"2026_10_JAX_TEN","away":"JAX","home":"TEN","away_name":"Jaguars","home_name":"Titans","kickoff_et":"2026-11-15T13:00:00-05:00","home_spread":10.5,"total_line":46.5,"ml_away":-700,"ml_home":500,"market_source":"1000013135.jpg","models":{"A":0.16900927,"B":0.11670258,"C":0.14083776,"C_alt":0.17163356,"D":0.22446189,"E":0.21470017,"X1":0.20185867,"X2":0.17586685,"Z0":0.43005212,"M0":0.234,"H1":0.19912011},"projected_home_margin":{"D":-10.6389704248381,"E":-10.9123463784438,"X1":-5.9257,"X2":-6.0536},"projected_total":{"X1":45.8714,"X2":45.8331}},{"game_id":"2026_10_KC_ATL","away":"KC","home":"ATL","away_name":"Chiefs","home_name":"Falcons","kickoff_et":"2026-11-15T13:00:00-05:00","home_spread":3.5,"total_line":47.5,"ml_away":-172,"ml_home":144,"market_source":"1000013139.jpg","models":{"A":0.34682643,"B":0.34063275,"C":0.34372295,"C_alt":0.35128167,"D":0.38808708,"E":0.38518883,"X1":0.39881665,"X2":0.38933582,"Z0":0.48075032,"M0":0.425,"H1":0.40360149},"projected_home_margin":{"D":-3.49658958620239,"E":-3.51608348627754,"X1":-0.4642,"X2":-0.3852},"projected_total":{"X1":47.5665,"X2":47.3748}},{"game_id":"2026_10_MIA_IND","away":"MIA","home":"IND","away_name":"Dolphins","home_name":"Colts","kickoff_et":"2026-11-15T13:00:00-05:00","home_spread":-3.5,"total_line":37.5,"ml_away":176,"ml_home":-210,"market_source":"1000013139.jpg","models":{"A":0.62277764,"B":0.28470118,"C":0.44770377,"C_alt":0.62458436,"D":0.55106785,"E":0.56673197,"X1":0.37612554,"X2":0.37509372,"Z0":0.58534461,"M0":0.607,"H1":0.46785623},"projected_home_margin":{"D":2.51552027757401,"E":3.04952247690783,"X1":-1.0058,"X2":-0.6976},"projected_total":{"X1":46.0114,"X2":46.1954}},{"game_id":"2026_10_MIN_GB","away":"MIN","home":"GB","away_name":"Vikings","home_name":"Packers","kickoff_et":"2026-11-15T13:00:00-05:00","home_spread":-2.5,"total_line":42.5,"ml_away":124,"ml_home":-146,"market_source":"1000013137.jpg","models":{"A":0.59433934,"B":0.58292857,"C":0.58864587,"C_alt":0.59728009,"D":0.70944012,"E":0.69865201,"X1":0.59072609,"X2":0.5754116,"Z0":0.5755559,"M0":0.557,"H1":0.56804696},"projected_home_margin":{"D":8.77649015134606,"E":8.15455292273908,"X1":3.9384,"X2":3.5201},"projected_total":{"X1":46.2667,"X2":45.9803}},{"game_id":"2026_10_LA_ARI","away":"LA","home":"ARI","away_name":"Rams","home_name":"Cardinals","kickoff_et":"2026-11-15T16:05:00-05:00","home_spread":9.5,"total_line":38.5,"ml_away":-500,"ml_home":385,"market_source":"1000013141.jpg","models":{"A":0.3064801,"B":0.17939694,"C":0.23712028,"C_alt":0.31270351,"D":0.33390745,"E":0.33077356,"X1":0.24801743,"X2":0.23319907,"Z0":0.52584604,"M0":0.261,"H1":0.24431944},"projected_home_margin":{"D":-5.6380043166273,"E":-5.63091367081332,"X1":-4.422,"X2":-4.2189},"projected_total":{"X1":45.019,"X2":45.0811}},{"game_id":"2026_10_SEA_LV","away":"SEA","home":"LV","away_name":"Seahawks","home_name":"Raiders","kickoff_et":"2026-11-15T16:05:00-05:00","home_spread":6.5,"total_line":40.5,"ml_away":-300,"ml_home":245,"market_source":"1000013139.jpg","models":{"A":0.36051554,"B":0.21883109,"C":0.28438583,"C_alt":0.35318555,"D":0.33083509,"E":0.32332566,"X1":0.25928501,"X2":0.24210756,"Z0":0.55333442,"M0":0.332,"H1":0.27806453},"projected_home_margin":{"D":-5.76406222266766,"E":-5.93275789104369,"X1":-4.0849,"X2":-3.9642},"projected_total":{"X1":44.8808,"X2":45.0461}},{"game_id":"2026_10_SF_DAL","away":"SF","home":"DAL","away_name":"49ers","home_name":"Cowboys","kickoff_et":"2026-11-15T16:25:00-05:00","home_spread":4.5,"total_line":55.5,"ml_away":-220,"ml_home":184,"market_source":"1000013141.jpg","models":{"A":0.29337686,"B":0.39470481,"C":0.3422443,"C_alt":0.31436132,"D":0.35925754,"E":0.36370549,"X1":0.2066415,"X2":0.17913782,"Z0":0.48149916,"M0":0.393,"H1":0.26468269},"projected_home_margin":{"D":-4.61851477053186,"E":-4.33430145006918,"X1":-5.759,"X2":-5.9376},"projected_total":{"X1":44.7461,"X2":44.4742}},{"game_id":"2026_10_PIT_CIN","away":"PIT","home":"CIN","away_name":"Steelers","home_name":"Bengals","kickoff_et":"2026-11-15T20:20:00-05:00","home_spread":-3.5,"total_line":49.5,"ml_away":150,"ml_home":-178,"market_source":"1000013141.jpg","models":{"A":0.54404118,"B":0.51682927,"C":0.53045786,"C_alt":0.53253219,"D":0.55294524,"E":0.56399377,"X1":0.54155189,"X2":0.54363676,"Z0":0.57771546,"M0":0.597,"H1":0.56498206},"projected_home_margin":{"D":2.58463882825688,"E":2.95013199620746,"X1":2.8036,"X2":2.8521},"projected_total":{"X1":44.9695,"X2":44.9931}},{"game_id":"2026_10_LAC_BAL","away":"LAC","home":"BAL","away_name":"Chargers","home_name":"Ravens","kickoff_et":"2026-11-16T20:15:00-05:00","home_spread":-4.5,"total_line":38.5,"ml_away":188,"ml_home":-225,"market_source":"1000013143.jpg","models":{"A":0.73289033,"B":0.50620437,"C":0.62646419,"C_alt":0.72248621,"D":0.65982867,"E":0.65941864,"X1":0.7239016,"X2":0.75219334,"Z0":0.67306388,"M0":0.617,"H1":0.698116},"projected_home_margin":{"D":6.68122560680468,"E":6.54744940867335,"X1":7.3192,"X2":7.6963},"projected_total":{"X1":46.9402,"X2":47.1104}}];
-const MODELS=['A','B','C','C_alt','D','E','X1','X2','Z0','M0','H1'];
-const TYPES={A:'Independent',B:'Baseline',C:'Challenger',C_alt:'Challenger',D:'Margin model',E:'Margin model',X1:'Margin & total',X2:'Margin & total',Z0:'Score-only Elo',M0:'Market proxy',H1:'Hybrid research'};
+const M0R_SHADOW={"2026_10_NE_DET":{"side":"NE","spread":2.5,"odds":100,"p":0.500874,"roi":0.001749,"status":"POST_KICKOFF_RESEARCH_ONLY"},"2026_10_BUF_NYJ":{"side":"BUF","spread":-7.5,"odds":-110,"p":0.605589,"roi":0.156124,"status":"PRE_KICKOFF_SHADOW_FALLBACK"},"2026_10_CAR_NO":{"side":"CAR","spread":1.5,"odds":100,"p":0.492382,"roi":-0.015235,"status":"PRE_KICKOFF_SHADOW_FALLBACK"},"2026_10_HOU_CLE":{"side":"HOU","spread":-4.5,"odds":-110,"p":0.531175,"roi":0.014061,"status":"PRE_KICKOFF_SHADOW_FALLBACK"},"2026_10_JAX_TEN":{"side":"JAX","spread":-10.5,"odds":-110,"p":0.593626,"roi":0.133286,"status":"PRE_KICKOFF_SHADOW_FALLBACK"},"2026_10_KC_ATL":{"side":"KC","spread":-3.5,"odds":100,"p":0.507318,"roi":0.014636,"status":"PRE_KICKOFF_SHADOW_FALLBACK"},"2026_10_MIA_IND":{"side":"IND","spread":-3.5,"odds":-115,"p":0.554455,"roi":0.03659,"status":"PRE_KICKOFF_SHADOW_FALLBACK"},"2026_10_MIN_GB":{"side":"MIN","spread":2.5,"odds":100,"p":0.500874,"roi":0.001749,"status":"PRE_KICKOFF_SHADOW_FALLBACK"},"2026_10_LA_ARI":{"side":"LA","spread":-9.5,"odds":-110,"p":0.564392,"roi":0.077476,"status":"PRE_KICKOFF_SHADOW_FALLBACK"},"2026_10_SEA_LV":{"side":"SEA","spread":-6.5,"odds":-110,"p":0.546806,"roi":0.043903,"status":"PRE_KICKOFF_SHADOW_FALLBACK"},"2026_10_SF_DAL":{"side":"SF","spread":-4.5,"odds":-105,"p":0.536392,"roi":0.047242,"status":"PRE_KICKOFF_SHADOW_FALLBACK"},"2026_10_PIT_CIN":{"side":"CIN","spread":-3.5,"odds":-110,"p":0.516406,"roi":-0.014135,"status":"PRE_KICKOFF_SHADOW_FALLBACK"},"2026_10_LAC_BAL":{"side":"BAL","spread":-4.5,"odds":-110,"p":0.541482,"roi":0.033739,"status":"PRE_KICKOFF_SHADOW_FALLBACK"}};
+const MODELS=['A','B','C','C_alt','D','E','X1','X2','Z0','M0','H1','M1_FB'];
+const TYPES={A:'Independent',B:'Baseline',C:'Challenger',C_alt:'Challenger',D:'Margin model',E:'Margin model',X1:'Margin & total',X2:'Margin & total',Z0:'Score-only Elo',M0:'Market proxy',H1:'Hybrid research',M1_FB:'Independent football EPA v0.1'};
+// Independent M1-FB football-only research challenger. Market-only M1 excluded.
+const M1_FB_FROZEN=Object.freeze({"2026_10_BUF_NYJ":{"classification":"NEW_PROSPECTIVE_RESEARCH_BEFORE_KICKOFF","p_home":0.36499,"projected_away_score":25.8,"projected_home_score":21.1},"2026_10_CAR_NO":{"classification":"NEW_PROSPECTIVE_RESEARCH_BEFORE_KICKOFF","p_home":0.553513,"projected_away_score":22.2,"projected_home_score":24.0},"2026_10_HOU_CLE":{"classification":"NEW_PROSPECTIVE_RESEARCH_BEFORE_KICKOFF","p_home":0.414308,"projected_away_score":23.4,"projected_home_score":20.4},"2026_10_JAX_TEN":{"classification":"NEW_PROSPECTIVE_RESEARCH_BEFORE_KICKOFF","p_home":0.363512,"projected_away_score":26.5,"projected_home_score":21.7},"2026_10_KC_ATL":{"classification":"NEW_PROSPECTIVE_RESEARCH_BEFORE_KICKOFF","p_home":0.343342,"projected_away_score":26.3,"projected_home_score":20.8},"2026_10_LAC_BAL":{"classification":"NEW_PROSPECTIVE_RESEARCH_BEFORE_KICKOFF","p_home":0.720479,"projected_away_score":14.5,"projected_home_score":22.4},"2026_10_LA_ARI":{"classification":"NEW_PROSPECTIVE_RESEARCH_BEFORE_KICKOFF","p_home":0.404333,"projected_away_score":23.6,"projected_home_score":20.3},"2026_10_MIA_IND":{"classification":"NEW_PROSPECTIVE_RESEARCH_BEFORE_KICKOFF","p_home":0.597061,"projected_away_score":20.2,"projected_home_score":23.5},"2026_10_MIN_GB":{"classification":"NEW_PROSPECTIVE_RESEARCH_BEFORE_KICKOFF","p_home":0.711225,"projected_away_score":15.9,"projected_home_score":23.4},"2026_10_NE_DET":{"classification":"RETROSPECTIVE_REPLAY_AFTER_KICKOFF","p_home":0.491834,"projected_away_score":24.3,"projected_home_score":24.0},"2026_10_PIT_CIN":{"classification":"NEW_PROSPECTIVE_RESEARCH_BEFORE_KICKOFF","p_home":0.442889,"projected_away_score":29.1,"projected_home_score":27.2},"2026_10_SEA_LV":{"classification":"NEW_PROSPECTIVE_RESEARCH_BEFORE_KICKOFF","p_home":0.353861,"projected_away_score":27.1,"projected_home_score":22.1},"2026_10_SF_DAL":{"classification":"NEW_PROSPECTIVE_RESEARCH_BEFORE_KICKOFF","p_home":0.380485,"projected_away_score":27.9,"projected_home_score":23.7}});
+const M1_FB_PROSPECTIVE=new Set(Object.keys(M1_FB_FROZEN).filter(id=>M1_FB_FROZEN[id].classification==='NEW_PROSPECTIVE_RESEARCH_BEFORE_KICKOFF'));
+for(const g of GAMES){const x=M1_FB_FROZEN[g.game_id];if(!x)throw Error('M1-FB forecast missing '+g.game_id);g.models.M1_FB=x.p_home;}
 const STORAGE='sel_nfl_week10_11track_results_manual_v1';
 let state={};try{state=JSON.parse(localStorage.getItem(STORAGE)||'{}')||{}}catch(e){}
 const AUTO_STORAGE='sel_nfl_week10_espn_scores_cache_v1';
@@ -103,16 +137,122 @@ function result(g){
  else if(s.final){a=number(s.away);h=number(s.home);source='MANUAL_UNVERIFIED';}
  return a!==null&&h!==null?{away:a,home:h,winner:a>h?g.away:(h>a?g.home:'TIE'),diff:h-a,total:h+a,source,verifiedAt}:null;
 }
-function getResultRow(g,m,actual){let homePick=g.models[m]>=.5?g.home:g.away;return !actual||actual.winner==='TIE'?null:(homePick===actual.winner?'W':'L')}
+function getResultRow(g,m,actual){if(m==='M1_FB'&&!M1_FB_PROSPECTIVE.has(g.game_id))return null;let homePick=g.models[m]>=.5?g.home:g.away;return !actual||actual.winner==='TIE'?null:(homePick===actual.winner?'W':'L')}
+function pregameSpread(g,m,finalResult){
+ const margin=g.projected_home_margin[m];
+ if(!Number.isFinite(margin))return null;
+ const cushion=margin+g.home_spread;
+ const side=Math.abs(cushion)<1e-8?'PASS':(cushion>0?g.home:g.away);
+ const actual=finalResult ? finalResult.diff+g.home_spread : null;
+ const grade=!finalResult?'PENDING':(side==='PASS'?'NO_PICK':Math.abs(actual)<1e-8?'P':((side===g.home?actual>0:actual<0)?'W':'L'));
+ const spreadValue=side===g.home?g.home_spread:-g.home_spread;
+ return {margin,cushion,side,spreadValue,grade};
+}
+function pregameTotal(g,m,finalResult){
+ const projection=g.projected_total[m];if(!Number.isFinite(projection))return null;
+ const delta=projection-g.total_line;
+ const side=Math.abs(delta)<1e-8?'PASS':delta>0?'OVER':'UNDER';
+ const actual=finalResult?finalResult.total-g.total_line:null;
+ const grade=!finalResult?'PENDING':(side==='PASS'?'NO_PICK':Math.abs(actual)<1e-8?'P':((side==='OVER'?actual>0:actual<0)?'W':'L'));
+ return {projection,delta,side,grade};
+}
+function derivedScore(g,m){
+ const margin=g.projected_home_margin[m],total=g.projected_total[m];
+ return Number.isFinite(margin)&&Number.isFinite(total)?{home:(total+margin)/2,away:(total-margin)/2}:null;
+}
+function signed1(v){return (v>0?'+':'')+v.toFixed(1)}
+function gradePill(g){
+ let el=document.createElement('span');el.className='result-pill '+(g==='W'?'w':g==='L'?'l':'');el.textContent=g==='PENDING'?'pending':g==='NO_PICK'?'pass':g;return el;
+}
+function researchMoneyline(g,m){
+ let ph=g.models[m];if(!Number.isFinite(ph))return null;
+ const home=ph>=.5, p=home?ph:1-ph;
+ const offered=home?g.ml_home:g.ml_away;
+ const profit=offered>0?offered/100:100/(-offered);
+ const rawEV=p*profit-(1-p);
+ const marketHome = g.ml_home>0?100/(g.ml_home+100):(-g.ml_home)/((-g.ml_home)+100);
+ const marketAway = g.ml_away>0?100/(g.ml_away+100):(-g.ml_away)/((-g.ml_away)+100);
+ const novig = home?marketHome/(marketHome+marketAway):marketAway/(marketHome+marketAway);
+ return {side:home?g.home:g.away, probability:p, odds:offered, rawEV, noVigDelta:p-novig};
+}
+function makeResearchPanel(g,finalResult){
+ let panel=document.createElement('section');panel.className='insights';
+ let title=document.createElement('div');title.className='insight-title';title.textContent='Recorded projections and research calls';panel.append(title);
+ let disclaimer=document.createElement('p');disclaimer.className='insight-help';disclaimer.textContent='Frozen model numbers vs archived FanDuel screenshots · ATS & totals grade only after a final · Scorelines are derived from original X1/X2 margins and totals.';panel.append(disclaimer);
+ let grid=document.createElement('div');grid.className='insight-grid';
+ // Scorelines can be derived only when BOTH a margin and total were originally saved.
+ let sc=document.createElement('div');sc.className='insight-block';let sh=document.createElement('h4');sh.textContent='Projected final scores';sc.append(sh);{const v=M1_FB_FROZEN[g.game_id];let row=document.createElement('div');row.className='insight-row';let b=document.createElement('b');b.textContent='M1-FB';let span=document.createElement('span');span.textContent=`${g.away} ${v.projected_away_score.toFixed(1)} — ${g.home} ${v.projected_home_score.toFixed(1)} · ${!M1_FB_PROSPECTIVE.has(g.game_id)?'REPLAY':'formula'}`;row.append(b,span);sc.append(row);}
+ for(const m of ['X1','X2']){
+  const v=derivedScore(g,m);if(!v)continue;
+  let row=document.createElement('div');row.className='insight-row';
+  let b=document.createElement('b');b.textContent=m;
+  let span=document.createElement('span');span.textContent=`${g.away} ${v.away.toFixed(1)}  —  ${g.home} ${v.home.toFixed(1)}`;
+  row.append(b,span);sc.append(row);
+ }
+ let scNote=document.createElement('p');scNote.className='insight-aside';scNote.textContent='M1-FB uses its own football score projection. X1/X2 scorelines are derived from their archived margin and total; D/E lack saved totals.';sc.append(scNote);
+ grid.append(sc);
+ // Spread cushion is a projected scoring difference, not a statistically verified betting edge.
+ let sp=document.createElement('div');sp.className='insight-block';let sph=document.createElement('h4');sph.textContent='Against-the-spread (ATS) research';sp.append(sph);
+ {const v=M0R_SHADOW[g.game_id];if(v){
+ let row=document.createElement('div');row.className='insight-row';let b=document.createElement('b');b.textContent='M0R shadow';
+ let span=document.createElement('span');span.textContent=`${v.side} ${signed1(v.spread)} (${formatOdds(v.odds)}) · scenario cover ${(v.p*100).toFixed(1)}% · ${v.status.startsWith('POST_')?'LATE – not prospective':'pre-kickoff shadow'} · no certified EV`;
+ let grade='PENDING';if(finalResult){const homediff=finalResult.diff+g.home_spread;grade=Math.abs(homediff)<1e-9?'P':((v.side===g.home?homediff>0:homediff<0)?'W':'L');}
+ row.append(b,span,gradePill(grade));sp.append(row);
+ }}
+ {let row=document.createElement('div');row.className='insight-row';let b=document.createElement('b');b.textContent='M0';
+ let span=document.createElement('span');span.textContent='No archived ATS selection · FanDuel '+g.home+' '+(g.home_spread>0?'+':'')+g.home_spread+' is a market quote, not an M0 pick';span.style.color='#efca8b';
+ row.append(b,span);sp.append(row);}
+
+ for(const m of ['D','E','X1','X2']){
+  let v=pregameSpread(g,m,finalResult);if(!v)continue;
+  let row=document.createElement('div');row.className='insight-row';let b=document.createElement('b');b.textContent=m;
+  let span=document.createElement('span');span.textContent=v.side==='PASS'?'No spread side':`${v.side} ${signed1(v.spreadValue)} · ${Math.abs(v.cushion).toFixed(1)}pt cushion`;
+  row.append(b,span,gradePill(v.grade));sp.append(row);
+ }
+ let spNote=document.createElement('p');spNote.className='insight-aside';spNote.textContent='Cushion = projected home margin + quoted home spread. Not a cover probability, quoted bet, or certified edge.';sp.append(spNote);
+ grid.append(sp);
+ // X1/X2 total leans.
+ let to=document.createElement('div');to.className='insight-block';let toh=document.createElement('h4');toh.textContent='Over / under research';to.append(toh);
+ for(const m of ['X1','X2']){
+  const v=pregameTotal(g,m,finalResult);if(!v)continue;
+  let row=document.createElement('div');row.className='insight-row';let b=document.createElement('b');b.textContent=m;
+  let span=document.createElement('span');span.textContent=v.side==='PASS'?`No lean (market ${g.total_line})`:`${v.side} ${g.total_line} · projection ${v.projection.toFixed(1)} (Δ ${signed1(v.delta)})`;
+  row.append(b,span,gradePill(v.grade));to.append(row);
+ }
+ let toNote=document.createElement('p');toNote.className='insight-aside';toNote.textContent='Total leans are points differences, not validated over/under probabilities.';to.append(toNote);
+ grid.append(to);panel.append(grid);
+ let details=document.createElement('details');details.className='research-details';
+ let summary=document.createElement('summary');summary.textContent='Moneyline price research — all models (NOT verified EV bets)';details.append(summary);
+ let explanation=document.createElement('p');explanation.className='insight-aside';explanation.textContent='Research-only arithmetic using original model win probabilities and screenshot FanDuel moneylines. ROI is the hypothetical expected return per $1 stake using UNCALIBRATED forecasts, not a validated wagering edge. Market-derived M0 and hybrid H1 are not independent price-validation models.';details.append(explanation);
+ let tableWrap=document.createElement('div');tableWrap.className='scoretable';let table=document.createElement('table');let thead=document.createElement('thead');
+ let tr=document.createElement('tr');for(const lbl of ['Model','ML side','Win P','Screenshot price','vs no-vig','Raw EV*','Winner result']){let th=document.createElement('th');th.textContent=lbl;tr.append(th)}thead.append(tr);table.append(thead);
+ let tbody=document.createElement('tbody');for(const m of MODELS){const v=researchMoneyline(g,m);if(!v)continue;
+   let row=document.createElement('tr');const values=[m,v.side,(v.probability*100).toFixed(1)+'%',formatOdds(v.odds),signed1(v.noVigDelta*100)+' pp',signed1(v.rawEV*100)+'%',(m==='M1_FB'&&!M1_FB_PROSPECTIVE.has(g.game_id))?'REPLAY / EXCLUDED':(!finalResult?'pending':(finalResult.winner==='TIE'?'push':finalResult.winner===v.side?'W':'L'))];
+   for(let j=0;j<values.length;j++){let td=document.createElement('td');td.textContent=values[j];if(j===5)td.className=v.rawEV>=0?'positive-research':'negative-research';row.append(td)}tbody.append(row);
+ }
+ table.append(tbody);tableWrap.append(table);details.append(tableWrap);panel.append(details);
+ let foot=document.createElement('p');foot.className='insight-aside';foot.textContent='* Raw EV is not betting certification. +EV requires validated calibrated probabilities, authentic timestamps, stakeable odds, and uncertainty checks. This page stores NO certified edge or recorded wagers.';panel.append(foot);
+ return panel;
+}
+function buildM0R(){
+ const tb=document.getElementById('m0rScoreboard');if(!tb)return;tb.replaceChildren();
+ for(const g of GAMES){const v=M0R_SHADOW[g.game_id];if(!v)continue;const x=result(g);
+ let grade='pending';if(x){const hd=x.diff+g.home_spread;grade=Math.abs(hd)<1e-9?'push':((v.side===g.home?hd>0:hd<0)?'WIN':'LOSS');}
+ let tr=document.createElement('tr');const txt=[`${g.away} @ ${g.home}`,`${v.side} ${signed1(v.spread)}`,formatOdds(v.odds),`${(v.p*100).toFixed(1)}%`,`${v.status.startsWith('POST_')?'LATE / EXCLUDED':'PROSPECTIVE SHADOW'} · ${grade}`];for(let t of txt){let c=document.createElement('td');c.textContent=t;tr.append(c)}tb.append(tr);
+ }
+}
 function build(){
+ buildM0R();
  document.getElementById('done').textContent=GAMES.filter(g=>result(g)).length;
  document.getElementById('waiting').textContent=GAMES.filter(g=>!result(g)).length;
  const sum=document.getElementById('summary');sum.replaceChildren();
  for(const m of MODELS){let wins=0,losses=0,brier=0;
-  for(const g of GAMES){let x=result(g);if(!x||x.winner==='TIE')continue;let status=getResultRow(g,m,x);wins+=status==='W'?1:0;losses+=status==='L'?1:0;brier+=(g.models[m]-(x.winner===g.home?1:0))**2;}
+  for(const g of GAMES){let x=result(g);if(!x||x.winner==='TIE'||(m==='M1_FB'&&!M1_FB_PROSPECTIVE.has(g.game_id)))continue;let status=getResultRow(g,m,x);wins+=status==='W'?1:0;losses+=status==='L'?1:0;brier+=(g.models[m]-(x.winner===g.home?1:0))**2;}
   let tr=document.createElement('tr');for(const val of [m,TYPES[m],wins,losses,wins+losses?(100*wins/(wins+losses)).toFixed(1)+'%':'—',wins+losses?(brier/(wins+losses)).toFixed(4):'—']){let td=document.createElement('td');td.textContent=val;tr.append(td)}sum.append(tr);
  }
  const ats=document.getElementById('atsSummary');ats.replaceChildren();
+ {let tr=document.createElement('tr');for(const v of ['M0 (spread market benchmark)','NOT RECORDED (0/13 ATS picks)','—']){let td=document.createElement('td');td.textContent=v;tr.append(td)}ats.append(tr);}
+
  for(const m of ['D','E','X1','X2']){let w=0,l=0,p=0,tw=0,tl=0,tp=0;
   for(const g of GAMES){let x=result(g);if(!x)continue;
    let predicted=g.projected_home_margin[m]+g.home_spread, realized=x.diff+g.home_spread;
@@ -140,18 +280,29 @@ function build(){
   let entry=document.createElement('div');entry.className='score-entry';let pairs=[];
   for(let side of ['away','home']){let group=document.createElement('label');group.className='team-score';let ab=document.createElement('b');ab.textContent=g[side];let inp=document.createElement('input');inp.type='number';inp.inputMode='numeric';inp.min=0;inp.max=150;inp.placeholder='—';inp.value=s[side]??'';inp.setAttribute('aria-label',g[side]+' points');inp.addEventListener('change',()=>{let next=state[g.game_id]||{};next[side]=inp.value;state[g.game_id]=next;save();build();});group.append(ab,inp);pairs.push(group);}
   let fin=document.createElement('label');fin.className='final-box';let chk=document.createElement('input');chk.type='checkbox';chk.checked=!!s.final;chk.addEventListener('change',()=>{let next=state[g.game_id]||{};next.final=chk.checked;state[g.game_id]=next;save();build();});fin.append(chk,document.createTextNode('Final (manual)'));entry.append(...pairs,fin);disclosure.append(entry);wrap.append(disclosure);
-  let chips=document.createElement('div');chips.className='model-grid';for(let m of MODELS){let p=g.models[m],pick=p>=.5?g.home:g.away;let cell=document.createElement('div');cell.className='prediction '+((m==='M0'||m==='H1')?'benchmark ':'')+cls(getResultRow(g,m,x));let model=document.createElement('b');model.textContent=m;let winner=document.createElement('span');winner.textContent=pick;let probability=document.createElement('small');probability.textContent=(100*(p>=.5?p:1-p)).toFixed(1)+'%';cell.append(model,winner,probability);chips.append(cell)}wrap.append(chips);
-  let foot=document.createElement('div');foot.className='endnotes';let homes=MODELS.filter(m=>g.models[m]>=.5).length;foot.textContent=`Consensus: ${homes} home / ${MODELS.length-homes} away · ${x?(x.source==='ESPN_FINAL'?'Final reported by ESPN':'Manual final (unverified)'):(es?.status==='LIVE'?'Game in progress':'Awaiting final')} · Forecasts immutable`;wrap.append(foot);root.append(wrap);
+  let chips=document.createElement('div');chips.className='model-grid';for(let m of MODELS){let p=g.models[m],pick=p>=.5?g.home:g.away;let cell=document.createElement('div');cell.className='prediction '+((m==='M0'||m==='H1')?'benchmark ':'')+cls(getResultRow(g,m,x));let model=document.createElement('b');model.textContent=m;let winner=document.createElement('span');winner.textContent=pick;let probability=document.createElement('small');probability.textContent=(100*(p>=.5?p:1-p)).toFixed(1)+'%'+(m==='M1_FB'&&!M1_FB_PROSPECTIVE.has(g.game_id)?' · REPLAY':'');cell.append(model,winner,probability);chips.append(cell)}wrap.append(chips);
+  wrap.append(makeResearchPanel(g,x));
+  let foot=document.createElement('div');foot.className='endnotes';let legacy=MODELS.filter(m=>m!=='M1_FB');let homes=legacy.filter(m=>g.models[m]>=.5).length;foot.textContent=`Original consensus: ${homes} home / ${legacy.length-homes} away · ${x?(x.source==='ESPN_FINAL'?'Final reported by ESPN':'Manual final (unverified)'):(es?.status==='LIVE'?'Game in progress':'Awaiting final')} · Forecasts immutable · Original M0 ATS unverified; separate M0R shadow graded independently`;wrap.append(foot);root.append(wrap);
  }
 }
 function formatOdds(v){return v>0?'+'+v:String(v)}
 function exportCSV(){
- let cols=['game_id','kickoff_et','away','home','away_score','home_score','result_source','is_final','as_of_utc','actual_winner',...MODELS.map(m=>'p_home_'+m),...MODELS.map(m=>'grade_'+m)];
- let lines=[cols];for(const g of GAMES){let x=result(g),e=sourceResult(g),s=state[g.game_id]||{};
-  lines.push([g.game_id,g.kickoff_et,g.away,g.home,x?.away??e?.away??s.away??'',x?.home??e?.home??s.home??'',x?.source??(e?'ESPN_LIVE_OR_SCHEDULED':'NO_DATA'),!!x,x?.verifiedAt??e?.captured_at??'',x?.winner??'',...MODELS.map(m=>g.models[m]),...MODELS.map(m=>getResultRow(g,m,x)||'')]);
+ let cols=['game_id','kickoff_et','away','home','screenshot_source','market_away_ml','market_home_ml','market_home_spread','market_total','away_score','home_score','result_source','is_final','as_of_utc','actual_winner',...MODELS.map(m=>'p_home_'+m),...MODELS.map(m=>'grade_'+m),'M0_ats_pick','M0_cover_probability','M0_ats_status'];
+ for(const m of ['D','E','X1','X2'])cols.push(m+'_projected_home_margin',m+'_spread_side',m+'_spread_line_for_side',m+'_ats_cushion_pts',m+'_ats_result');
+ for(const m of ['X1','X2'])cols.push(m+'_projected_total',m+'_total_side',m+'_total_difference_pts',m+'_total_result',m+'_derived_away_score',m+'_derived_home_score');
+ for(const m of MODELS)cols.push(m+'_raw_ml_ev_fraction_uncertified');
+ cols.push('M1_FB_classification','M1_FB_score_away','M1_FB_score_home');
+ let lines=[cols];
+ for(const g of GAMES){let x=result(g),e=sourceResult(g),s=state[g.game_id]||{};
+  let fields=[g.game_id,g.kickoff_et,g.away,g.home,g.market_source,g.ml_away,g.ml_home,g.home_spread,g.total_line,x?.away??e?.away??s.away??'',x?.home??e?.home??s.home??'',x?.source??(e?'ESPN_LIVE_OR_SCHEDULED':'NO_DATA'),!!x,x?.verifiedAt??e?.captured_at??'',x?.winner??'',...MODELS.map(m=>g.models[m]),...MODELS.map(m=>getResultRow(g,m,x)||''),'','','NOT_ARCHIVED_UNVERIFIED_ATS'];
+  for(const m of ['D','E','X1','X2']){let v=pregameSpread(g,m,x);fields.push(v?.margin??'',v?.side??'',v?.spreadValue??'',v?.cushion??'',v?.grade??'');}
+  for(const m of ['X1','X2']){let v=pregameTotal(g,m,x),sc=derivedScore(g,m);fields.push(v?.projection??'',v?.side??'',v?.delta??'',v?.grade??'',sc?.away??'',sc?.home??'');}
+  for(const m of MODELS)fields.push(researchMoneyline(g,m)?.rawEV??'');
+  fields.push(M1_FB_FROZEN[g.game_id].classification,M1_FB_FROZEN[g.game_id].projected_away_score,M1_FB_FROZEN[g.game_id].projected_home_score);
+  lines.push(fields);
  }
  let esc=x=>'"'+String(x).replace(/"/g,'""')+'"';let csv=lines.map(r=>r.map(esc).join(',')).join('\r\n');
- let blob=new Blob([csv],{type:'text/csv;charset=utf-8'});let url=URL.createObjectURL(blob);let a=document.createElement('a');a.href=url;a.download='Sports_Edge_Lab_Week10_ESPN_Score_Results.csv';document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);
+ let blob=new Blob([csv],{type:'text/csv;charset=utf-8'});let url=URL.createObjectURL(blob);let a=document.createElement('a');a.href=url;a.download='SEL_Week10_Frozen_Model_Spread_Total_Edge_Research_Results.csv';document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);
 }
 
 build();
