@@ -1,0 +1,44 @@
+name: R3 ATS Pregame Capture
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '15 18 * * 4'
+    - cron: '15 14 * * 6'
+    - cron: '15 15 * * 0'
+    - cron: '15 19 * * 1'
+permissions:
+  contents: write
+concurrency:
+  group: sel-r3-pregame
+  cancel-in-progress: false
+jobs:
+  capture:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - name: Extract R3 package
+        run: |
+          unzip -o R3_ATS_AUTOMATION_UPLOAD_PACKAGE.zip \
+            scripts/r3_odds_sync.py \
+            scripts/test_r3_odds_sync.py \
+            data/r3_model_frozen_v01.json \
+            R3_ATS_OPERATING_BASELINE.html
+      - name: Run offline tests
+        run: python3 -m unittest discover -s scripts -p 'test_r3_odds_sync.py' -v
+      - name: Capture pregame ATS picks
+        env:
+          ODDSPAPI_API_KEY: ${{ secrets.ODDSPAPI_API_KEY }}
+        run: python3 scripts/r3_odds_sync.py
+      - name: Save R3 predictions
+        run: |
+          git add R3_ATS_OPERATING_BASELINE.html
+          if [ -f data/r3_auto_picks.json ]; then
+            git add data/r3_auto_picks.json
+          fi
+          if ! git diff --cached --quiet; then
+            git config user.name 'github-actions[bot]'
+            git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+            git commit -m 'R3: capture pregame ATS picks'
+            git push
+          fi
