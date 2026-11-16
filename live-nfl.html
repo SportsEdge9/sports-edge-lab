@@ -300,13 +300,13 @@ function snapshotStatus(s){const k=s.kickoff_utc,locked=s.locked_at_utc,m=s.mark
 
 // An archived claim of "certified" alone cannot create the visual badge.
 // A documented, calibrated, positive-EV spread candidate with pre-kickoff
-// timestamps, a fresh executable quote and model-specific QA attestation is required.
+// timestamps, a recorded sportsbook quote and model-specific QA attestation are required.
 function numericOdds(n){return numeric(n)&&Number.isInteger(n)&&(n>=100||n<=-100);}
 function archivedEv(p,price){return p*(price>0?price/100:100/Math.abs(price))-(1-p);}
 function certifiedEdgesFor(id){
  const s=snapshotFor(id);if(!s||!snapshotStatus(s).ok||!s.archive_id)return [];
  const m=s.market||{};
- if(m.quote_status!=='fresh'||!m.sportsbook||!numeric(m.home_spread)||!numericOdds(m.home_odds)||!numericOdds(m.away_odds))return [];
+ if(!m.sportsbook||!numeric(m.home_spread)||!numericOdds(m.home_odds)||!numericOdds(m.away_odds))return [];
  const kickoff=Date.parse(s.kickoff_utc);
  const validAtKickoff=v=>v&&Number.isFinite(Date.parse(v))&&Date.parse(v)<=kickoff;
  if(!validAtKickoff(m.quoted_at_utc)||!validAtKickoff(s.locked_at_utc))return [];
