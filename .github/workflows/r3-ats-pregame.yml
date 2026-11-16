@@ -24,6 +24,10 @@ jobs:
             scripts/test_r3_odds_sync.py \
             data/r3_model_frozen_v01.json \
             R3_ATS_OPERATING_BASELINE.html
+      - name: Fix OddsPapi full-game spread catalogue period
+        run: |
+          sed -i "s/'fulltime','full-time','', 'match'/'fulltime','full-time','', 'match', 'result'/" scripts/r3_odds_sync.py
+          grep -q "'match', 'result'" scripts/r3_odds_sync.py
       - name: Run offline tests
         run: python3 -m unittest discover -s scripts -p 'test_r3_odds_sync.py' -v
       - name: Capture pregame ATS picks
