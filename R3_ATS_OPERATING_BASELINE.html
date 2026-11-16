@@ -11,10 +11,27 @@ button{background:#1476a1;border:1px solid #58c5ee;color:white;padding:11px 15px
 .actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:15px}.small{font-size:12px;color:var(--muted)}.output{background:#081c2c;border-radius:9px;padding:15px;margin-top:14px;border:1px solid #47718a}.pick{font-size:28px;font-weight:900;color:var(--accent)}.stats{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-top:12px}.stat{border:1px solid #2d4d69;border-radius:8px;padding:11px}.stat span{display:block;color:var(--muted);font-size:11px}.stat strong{display:block;font-size:18px;margin-top:3px}.status{margin-top:10px;color:var(--amber);font-size:13px}
 #log{margin:0;padding-left:20px;max-height:210px;overflow:auto}#log li{margin-bottom:6px;overflow-wrap:anywhere}.tag{display:inline-block;background:#1e3b52;color:#b6dcf6;border:1px solid #3b698a;border-radius:5px;font-size:11px;padding:2px 6px}
 @media(max-width:480px){main{padding:15px 10px}.panel{padding:13px}.fields{gap:9px}.stats{gap:6px}.stat{padding:8px}}
+</style>
+<style>
+.r3feed{border:1px solid #3370a1;background:linear-gradient(135deg,#0d2a43,#0a1c30);border-radius:13px;padding:16px;margin:10px 0 17px}
+.r3feed-head{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px}
+.r3feed-head h2{margin:0}.r3feed-head button{font-size:12px;padding:8px 10px}
+.r3feed-items{display:grid;gap:9px;margin-top:12px}.r3feed-item{padding:12px;border:1px solid #335b7c;background:#0a1c2c;border-radius:8px}
+.r3feed-game{display:flex;justify-content:space-between;gap:7px;flex-wrap:wrap;font-weight:700}
+.r3feed-pick{color:#75d8ff;font-size:18px;font-weight:850;margin:5px 0}
+.r3feed-meta{font-size:11px;color:#c1d1df;line-height:1.55}
+.r3feed-status{font-size:12px;color:#d9c18e;margin-top:9px}
 </style></head><body><main>
 <div class="eyebrow">SPORTS EDGE LAB · BEYOND THE ODDS</div><h1>R3 ATS · Operating Baseline</h1>
 <p class="sub">One working research calculator • NFL • 2026 historical team-market residuals</p>
 <div class="banner"><b>Provenance:</b> R3 operating reconstruction v0.1 — NOT the missing original R3 engine, NOT a validated +EV system. Trains on 149 archived 2026 games (Weeks 1–10) and estimates market residuals with a ridge team-strength regression. Research inputs use historical, unverified odds. No future scores feed this calculator. Manual odds entries are not independently verified.</div>
+
+<section id="r3auto" class="r3feed" aria-label="Automated R3 pregame results">
+  <div class="r3feed-head"><h2>Automated R3 NFL ATS · Pregame</h2><button id="r3-auto-refresh" class="secondary" type="button">Refresh saved picks</button></div>
+  <p class="small">OddsPapi → GitHub Actions → frozen R3 research picks. Updates are server-generated, not live betting signals. A frozen quote is never rewritten. Your manual picks below remain untouched.</p>
+  <div id="r3-auto-status" class="r3feed-status">Checking saved feed…</div>
+  <div id="r3-auto-games" class="r3feed-items"></div>
+</section>
 <section class="panel"><h2>1. Enter an upcoming matchup</h2>
 <div class="fields">
 <label>Away team<select id="away"></select></label><label>Home team<select id="home"></select></label>
@@ -149,4 +166,44 @@ $('export').addEventListener('click',exportJSON);
 $('csv').addEventListener('click',exportCSV);
 for(const id of ['away','home','spread','hp','ap','source','kickoff','quote'])$(id).addEventListener('input',()=>{$('freeze').disabled=true;current=null;});
 renderLog();
+</script>
+<script>
+(function(){
+ 'use strict';
+ const status=document.getElementById('r3-auto-status');
+ const cards=document.getElementById('r3-auto-games');
+ const esc=(s)=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+ const pct=(x)=>Number.isFinite(Number(x))?(100*Number(x)).toFixed(1)+'%':'—';
+ const sign=(x)=>Number(x)>0?'+'+x:String(x);
+ const pretty=(t)=>{try{return new Date(t).toLocaleString(undefined,{dateStyle:'medium',timeStyle:'short'});}catch{return String(t||'—')}};
+ async function reload(){
+   status.textContent='Checking saved GitHub Actions feed…';cards.innerHTML='';
+   try{
+     const res=await fetch('./data/r3_auto_picks.json?v='+Date.now(),{cache:'no-store'});
+     if(!res.ok)throw Error('Feed not published yet (HTTP '+res.status+'). Run the R3 ATS Pregame Capture workflow once in GitHub Actions.');
+     const x=await res.json();
+     if(x.schema!=='sel.r3.pregame.v1')throw Error('Unsupported feed format');
+     const frozen=Array.isArray(x.frozen)?x.frozen:[];
+     const statuses=Array.isArray(x.upcomingStatus)?x.upcomingStatus:[];
+     status.textContent='Last capture: '+pretty(x.generatedAtUtc)+' · '+frozen.length+' frozen research pick(s) · '+statuses.length+' upcoming fixtures checked. No certified edges.';
+     for(const entry of frozen){
+       const p=entry.modelOutput||{};
+       const el=document.createElement('div');el.className='r3feed-item';
+       el.innerHTML='<div class="r3feed-game"><span>'+esc(entry.away)+' @ '+esc(entry.home)+'</span><span>'+esc(pretty(entry.kickoffUtc))+'</span></div>'+
+         '<div class="r3feed-pick">'+esc(p.pickTeam)+' '+esc(sign(p.pickSpread))+' ('+esc(sign(p.pickPrice))+')</div>'+
+         '<div class="r3feed-meta">'+esc(entry.bookmaker)+' · Listed home spread '+esc(sign(entry.homeSpread))+' · Projected home margin '+esc(sign(p.projectedHomeMargin))+' · Cover '+esc(pct(p.coverProbabilityConditional))+' · Estimated EV '+esc(pct(p.estimatedEVPerUnit))+' · Quote '+esc(pretty(entry.bookmakerQuoteTimeHome))+' · Frozen '+esc(pretty(entry.frozenAtUtc))+'</div>';
+       cards.appendChild(el);
+     }
+     for(const e of statuses){
+       if(e.status==='FROZEN'||e.status==='ALREADY_FROZEN')continue;
+       const el=document.createElement('div');el.className='r3feed-item';
+       el.innerHTML='<div class="r3feed-game">'+esc((e.away||'?')+' @ '+(e.home||'?'))+'</div><div class="r3feed-meta">No frozen pick: '+esc(e.status)+' · '+esc(pretty(e.kickoffUtc))+'</div>';
+       cards.appendChild(el);
+     }
+     if(!frozen.length&&!statuses.length)cards.textContent='No upcoming R3 selections captured yet.';
+   }catch(err){status.textContent=err.message||String(err);}
+ }
+ document.getElementById('r3-auto-refresh').addEventListener('click',reload);
+ reload();
+})();
 </script></body></html>

@@ -1,0 +1,51 @@
+{
+  "frozen": [
+    {
+      "away": "LAC",
+      "awaySpreadPrice": -110,
+      "bookmaker": "fanduel",
+      "bookmakerQuoteTimeAway": "2026-11-16T13:43:06.996Z",
+      "bookmakerQuoteTimeHome": "2026-11-16T13:43:06.996Z",
+      "fixtureId": "id1400003171516032",
+      "frozenAtUtc": "2026-11-16T21:09:12Z",
+      "home": "BAL",
+      "homeSpread": -4.5,
+      "homeSpreadPrice": -110,
+      "kickoffUtc": "2026-11-17T01:15:00Z",
+      "modelOutput": {
+        "certifiedEdge": false,
+        "coverProbabilityConditional": 0.546347,
+        "estimatedEVPerUnit": 0.043025,
+        "marketHomeMargin": 4.5,
+        "model": "R3_OPS_RECON_V0.1_2026_ONLY",
+        "passesResearchThreshold": true,
+        "pickPrice": -110,
+        "pickSpread": 4.5,
+        "pickTeam": "LAC",
+        "projectedHomeMargin": 2.928,
+        "pushProbability": 0.0,
+        "residualHomePoints": -1.572,
+        "side": "AWAY",
+        "trainingGames": 149
+      },
+      "provenance": "R3 reconstructed; prospective GitHub Actions capture",
+      "quoteObservedAtUtc": "2026-11-16T21:09:12Z",
+      "quoteVerification": "API_RECEIVED_PREKICKOFF",
+      "source": "OddsPapi v4 / odds"
+    }
+  ],
+  "generatedAtUtc": "2026-11-16T21:09:13Z",
+  "model": "R3_OPS_RECON_V0.1_2026_ONLY",
+  "notes": "Frozen picks never overwritten; no postkickoff inference; sample is not a validated profitable model.",
+  "schema": "sel.r3.pregame.v1",
+  "status": "RESEARCH_ONLY_NOT_CERTIFIED",
+  "upcomingStatus": [
+    {
+      "away": "LAC",
+      "fixtureId": "id1400003171516032",
+      "home": "BAL",
+      "kickoffUtc": "2026-11-17T01:15:00Z",
+      "status": "FROZEN"
+    }
+  ]
+}
