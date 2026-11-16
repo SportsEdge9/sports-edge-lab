@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sports Edge Lab · R3 ATS Operating Baseline</title><style>
+:root{color-scheme:dark;--bg:#07121f;--card:#101f31;--border:#324b65;--ink:#eff7ff;--muted:#9eb7c9;--accent:#51c5ee;--good:#81e6b6;--amber:#ffcf76}
+*{box-sizing:border-box}body{margin:0;background:linear-gradient(160deg,#0d2940,#06101c 48%);font:15px/1.48 system-ui,Arial,sans-serif;color:var(--ink)}main{width:min(900px,100%);margin:auto;padding:22px 15px 60px}
+h1{font-size:clamp(24px,5vw,36px);margin:8px 0 4px;letter-spacing:-1px}h2{font-size:18px;margin:0 0 10px}.eyebrow{font-size:11px;font-weight:900;letter-spacing:2px;color:var(--accent)}.sub{color:var(--muted);margin:0 0 18px}
+.banner{border-left:3px solid var(--amber);background:#2e2a25;padding:12px 15px;border-radius:7px;font-size:13px;margin:12px 0 19px}
+.panel{background:var(--card);border:1px solid var(--border);border-radius:13px;padding:17px;margin-bottom:16px}.fields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+label{display:flex;flex-direction:column;gap:5px;color:var(--muted);font-weight:700;font-size:12px}input,select{width:100%;min-width:0;background:#071525;color:var(--ink);border:1px solid #46627b;padding:11px;border-radius:7px;font:inherit}
+button{background:#1476a1;border:1px solid #58c5ee;color:white;padding:11px 15px;border-radius:8px;font-weight:800;cursor:pointer;font:inherit}button.secondary{background:#1b2e40;border-color:#496379}button:disabled{opacity:.45;cursor:not-allowed}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:15px}.small{font-size:12px;color:var(--muted)}.output{background:#081c2c;border-radius:9px;padding:15px;margin-top:14px;border:1px solid #47718a}.pick{font-size:28px;font-weight:900;color:var(--accent)}.stats{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-top:12px}.stat{border:1px solid #2d4d69;border-radius:8px;padding:11px}.stat span{display:block;color:var(--muted);font-size:11px}.stat strong{display:block;font-size:18px;margin-top:3px}.status{margin-top:10px;color:var(--amber);font-size:13px}
+#log{margin:0;padding-left:20px;max-height:210px;overflow:auto}#log li{margin-bottom:6px;overflow-wrap:anywhere}.tag{display:inline-block;background:#1e3b52;color:#b6dcf6;border:1px solid #3b698a;border-radius:5px;font-size:11px;padding:2px 6px}
+@media(max-width:480px){main{padding:15px 10px}.panel{padding:13px}.fields{gap:9px}.stats{gap:6px}.stat{padding:8px}}
+</style></head><body><main>
+<div class="eyebrow">SPORTS EDGE LAB · BEYOND THE ODDS</div><h1>R3 ATS · Operating Baseline</h1>
+<p class="sub">One working research calculator • NFL • 2026 historical team-market residuals</p>
+<div class="banner"><b>Provenance:</b> R3 operating reconstruction v0.1 — NOT the missing original R3 engine, NOT a validated +EV system. Trains on 149 archived 2026 games (Weeks 1–10) and estimates market residuals with a ridge team-strength regression. Research inputs use historical, unverified odds. No future scores feed this calculator. Manual odds entries are not independently verified.</div>
+<section class="panel"><h2>1. Enter an upcoming matchup</h2>
+<div class="fields">
+<label>Away team<select id="away"></select></label><label>Home team<select id="home"></select></label>
+<label>Home spread (sportsbook convention)<input type="number" step="0.5" id="spread" placeholder="-3.5 if home favored by 3.5"></label>
+<label>Home spread price (American)<input type="number" step="1" id="hp" value="-110"></label>
+<label>Away spread price (American)<input type="number" step="1" id="ap" value="-110"></label>
+<label>Sportsbook / source<input id="source" placeholder="e.g. FanDuel, manually entered"></label>
+<label>Kickoff (your local time)<input type="datetime-local" id="kickoff"></label>
+<label>Market quote time (optional)<input type="datetime-local" id="quote"></label>
+</div>
+<p class="small">Odds can be calculated at any age; there is <b>no refresh-age block</b>. A stored pre-kickoff lock is only allowed when the entered kickoff is in the future. Quote times are reported, not assumed verified.</p>
+<div class="actions"><button id="calc">Calculate ATS</button><button id="freeze" class="secondary" disabled>Freeze pregame pick</button><button id="clear" class="secondary">Clear result</button></div>
+<div id="result" class="output" aria-live="polite">Select teams and enter the sportsbook line, then calculate.</div>
+</section>
+<section class="panel"><h2>2. Pregame selection log <span class="tag">LOCAL DEVICE</span></h2>
+<p class="small">Frozen picks are saved in this browser only. Export after locking to preserve a portable audit record. Local device timestamps and typed bookmaker lines are not third-party verification.</p>
+<ol id="log"></ol>
+<div class="actions"><button class="secondary" id="export">Export frozen picks (JSON)</button><button class="secondary" id="csv">Export CSV</button></div>
+</section>
+<section class="panel"><h2>Model specification</h2><p class="small">Input: 149 recovered 2026 archived game scores + spread-line observations. Outcome is actual home margin minus historical home favorite margin. Independent home intercept plus opponent-adjusted team strengths fitted by ridge regression (team alpha 85, intercept alpha 25; 6-week recency half-life). Projected home margin equals entered home favorite margin plus fitted residual. Probability model uses a normal margin spread σ=13.5 points, with explicit push probability on whole-number lines. These choices are <b>reconstruction assumptions</b>, not verified original R3 settings. EV uses each entered side's actual American price. No automatic live odds feed, no verified source timestamp, and no real-time injury/QB information.</p>
+</section>
+</main><script>
+'use strict';
+const HISTORY=[[1,"ARI","LAC",26,14,8.5],[1,"ATL","PIT",13,20,6.5],[1,"BAL","IND",41,23,-3.0],[1,"BUF","HOU",36,31,-1.5],[1,"CHI","CAR",59,37,-3.0],[1,"CLE","JAX",10,34,8.5],[1,"DAL","NYG",20,28,-3.0],[1,"DEN","KC",10,31,2.5],[1,"GB","MIN",22,39,1.5],[1,"MIA","LV",13,27,3.0],[1,"NE","SEA",10,13,3.0],[1,"NO","DET",30,31,7.0],[1,"NYJ","TEN",23,10,1.5],[1,"SF","LA",27,7,3.5],[1,"TB","CIN",27,33,3.5],[1,"WAS","PHI",22,24,6.0],[2,"CAR","ATL",34,3,-2.5],[2,"CIN","HOU",20,6,3.0],[2,"CLE","TB",23,19,8.5],[2,"DET","BUF",31,41,5.5],[2,"GB","NYJ",20,17,-3.5],[2,"IND","KC",30,33,6.0],[2,"JAX","DEN",13,20,2.5],[2,"LV","LAC",26,14,6.5],[2,"MIA","SF",13,35,12.5],[2,"MIN","CHI",9,3,4.5],[2,"NO","BAL",24,17,8.5],[2,"NYG","LA",6,28,6.5],[2,"PHI","TEN",24,20,-7.0],[2,"PIT","NE",3,20,4.5],[2,"SEA","ARI",31,7,-3.5],[2,"WAS","DAL",20,37,3.5],[3,"ARI","SF",30,36,7.5],[3,"ATL","GB",35,14,4.5],[3,"BAL","DAL",34,31,-3.0],[3,"CAR","CLE",18,21,-2.5],[3,"CIN","PIT",27,30,-3.5],[3,"HOU","IND",17,19,-1.5],[3,"KC","MIA",24,10,-10.0],[3,"LA","DEN",26,30,1.5],[3,"LAC","BUF",16,24,7.0],[3,"LV","NO",35,27,3.5],[3,"MIN","TB",23,16,-1.5],[3,"NE","JAX",6,35,3.0],[3,"NYJ","DET",24,31,7.0],[3,"PHI","CHI",7,27,-3.5],[3,"SEA","WAS",31,33,-8.5],[3,"TEN","NYG",7,12,2.5],[4,"ARI","NYG",24,36,-2.5],[4,"ATL","NO",45,24,1.5],[4,"DAL","HOU",34,30,3.0],[4,"DEN","SF",14,24,3.0],[4,"DET","CAR",26,32,-4.5],[4,"GB","TB",17,14,-3.0],[4,"IND","WAS",30,13,-4.5],[4,"JAX","CIN",22,17,2.5],[4,"KC","LV",30,27,-4.5],[4,"LA","PHI",24,20,-3.5],[4,"LAC","SEA",23,30,7.0],[4,"MIA","MIN",10,15,10.0],[4,"NE","BUF",29,26,7.0],[4,"NYJ","CHI",12,23,3.5],[4,"PIT","CLE",24,27,-2.5],[4,"TEN","BAL",18,24,11.5],[5,"BAL","ATL",30,23,3.5],[5,"BUF","LA",37,34,3.5],[5,"CHI","GB",7,31,-1.5],[5,"CIN","MIA",31,24,-7.0],[5,"CLE","NYJ",12,17,2.5],[5,"DEN","LAC",23,17,-3.5],[5,"DET","ARI",45,21,-5.5],[5,"HOU","TEN",26,3,-6.5],[5,"IND","PIT",22,34,3.0],[5,"LV","NE",17,45,3.5],[5,"MIN","NO",23,13,-2.5],[5,"NYG","WAS",27,27,3.5],[5,"PHI","JAX",17,19,7.5],[5,"SF","SEA",32,29,3.0],[5,"TB","DAL",24,16,9.5],[6,"ARI","LA",18,16,12.5],[6,"BAL","CLE",10,13,-3.0],[6,"BUF","LV",33,30,-5.5],[6,"CAR","PHI",25,14,-3.0],[6,"CHI","ATL",31,23,-1.5],[6,"DAL","GB",13,23,-1.5],[6,"HOU","JAX",34,31,2.5],[6,"LAC","KC",6,22,7.5],[6,"NO","NYG",34,27,-1.5],[6,"NYJ","NE",19,26,7.5],[6,"PIT","TB",26,19,-2.5],[6,"SEA","DEN",14,17,-2.5],[6,"TEN","IND",26,20,6.5],[6,"WAS","SF",17,23,7.5],[7,"CIN","BAL",35,13,-3.0],[7,"CLE","TEN",27,24,-1.5],[7,"DAL","PHI",38,21,-4.5],[7,"DEN","ARI",30,16,-4.5],[7,"GB","DET",17,20,3.5],[7,"IND","MIN",10,16,6.5],[7,"KC","SEA",3,20,3.0],[7,"LA","LV",35,21,-3.5],[7,"MIA","NYJ",28,25,3.5],[7,"NE","CHI",24,30,3.0],[7,"NYG","HOU",27,21,10.0],[7,"PIT","NO",16,10,-3.0],[7,"SF","ATL",20,29,-2.5],[7,"TB","CAR",43,13,3.0],[8,"ARI","DAL",33,30,7.0],[8,"ATL","TB",0,16,2.5],[8,"BAL","BUF",10,36,3.0],[8,"CAR","GB",19,27,3.5],[8,"CHI","SEA",34,17,3.0],[8,"CLE","PIT",6,27,3.5],[8,"IND","JAX",7,42,10.0],[8,"KC","DEN",24,28,1.5],[8,"LAC","LA",9,24,6.5],[8,"LV","NYJ",38,33,1.5],[8,"MIN","DET",15,19,3.0],[8,"NE","MIA",24,19,-7.0],[8,"PHI","WAS",10,27,6.0],[8,"TEN","CIN",36,43,13.5],[9,"ARI","SEA",3,17,8.5],[9,"BUF","MIN",23,6,-3.0],[9,"CIN","ATL",34,17,-3.0],[9,"CLE","NO",22,23,4.5],[9,"DAL","IND",27,23,-4.5],[9,"DEN","CAR",26,21,-3.0],[9,"DET","MIA",19,9,-6.5],[9,"GB","NE",45,27,3.0],[9,"HOU","LAC",44,22,-5.5],[9,"JAX","BAL",33,10,-8.5],[9,"LA","WAS",20,13,-4.5],[9,"LV","SF",17,38,8.5],[9,"NYG","PHI",19,11,-3.0],[9,"NYJ","KC",12,35,9.5],[9,"TB","CHI",24,27,6.5],[10,"BUF","NYJ",31,12,-8.5],[10,"CAR","NO",20,17,1.5],[10,"HOU","CLE",24,27,-4.5],[10,"JAX","TEN",40,23,-10.5],[10,"KC","ATL",35,13,-3.0],[10,"LA","ARI",34,6,-10.0],[10,"MIA","IND",22,24,4.5],[10,"MIN","GB",30,10,2.5],[10,"NE","DET",10,35,2.5],[10,"PIT","CIN",18,38,4.5],[10,"SEA","LV",21,13,-6.5],[10,"SF","DAL",46,40,-3.5],[10,"WAS","NYG",24,21,1.5]];
+const TEAMS='ARI ATL BAL BUF CAR CHI CIN CLE DAL DEN DET GB HOU IND JAX KC LA LAC LV MIA MIN NE NO NYG NYJ PHI PIT SEA SF TB TEN WAS'.split(' ');
+const VERSION='R3_OPS_RECON_V0.1_2026_ONLY';
+const $=id=>document.getElementById(id);
+const round=(n,d=3)=>Number(n.toFixed(d));
+const validPrice=n=>Number.isFinite(n)&&(n<=-100||n>=100);
+const netProfit=price=>price<0?100/Math.abs(price):price/100;
+function solve(A,b){ // Pivoted Gauss-Jordan, 33-dimensional positive definite ridge system.
+ let n=b.length;A=A.map((row,i)=>row.slice().concat(b[i]));
+ for(let j=0;j<n;j++){
+  let p=j;for(let i=j+1;i<n;i++)if(Math.abs(A[i][j])>Math.abs(A[p][j]))p=i;
+  if(Math.abs(A[p][j])<1e-12)throw Error('Ridge matrix singular');
+  [A[j],A[p]]=[A[p],A[j]];let t=A[j][j];for(let k=j;k<=n;k++)A[j][k]/=t;
+  for(let i=0;i<n;i++)if(i!==j){let c=A[i][j];if(!c)continue;for(let k=j;k<=n;k++)A[i][k]-=c*A[j][k];}
+ }
+ return A.map(row=>row[n]);
+}
+function train(){
+ const n=33, A=Array.from({length:n},()=>Array(n).fill(0)), b=Array(n).fill(0);
+ for(let i=0;i<n;i++)A[i][i]=i===0?25:85;
+ const latest=Math.max(...HISTORY.map(g=>g[0]));
+ for(const [week,away,home,as,hs,historyHomeFavoriteMargin] of HISTORY){
+  const ix=[0,1+TEAMS.indexOf(home),1+TEAMS.indexOf(away)],x=[1,1,-1];
+  if(ix[1]<1||ix[2]<1)throw Error('Unrecognized archived team');
+  const w=Math.pow(0.5,(latest-week)/6);
+  const y=(hs-as)-historyHomeFavoriteMargin;
+  for(let j=0;j<3;j++){b[ix[j]]+=w*x[j]*y;for(let k=0;k<3;k++)A[ix[j]][ix[k]]+=w*x[j]*x[k];}
+ }
+ return solve(A,b);
+}
+const beta=train();
+function normcdf(x){ // Standard normal cumulative, ~1e-7 precision.
+ const ax=Math.abs(x),t=1/(1+0.2316419*ax);
+ const q=Math.exp(-.5*ax*ax)/Math.sqrt(2*Math.PI)*(t*(.319381530+t*(-.356563782+t*(1.781477937+t*(-1.821255978+t*1.330274429)))));
+ return x>=0?1-q:q;
+}
+function coverProbs(mu,homeFavoriteMargin){
+ const s=13.5;
+ let ph,pa,pp;
+ if(Number.isInteger(homeFavoriteMargin)){
+  ph=1-normcdf((homeFavoriteMargin+.5-mu)/s);
+  pa=normcdf((homeFavoriteMargin-.5-mu)/s);
+  pp=Math.max(0,1-ph-pa);
+ }else{ph=1-normcdf((homeFavoriteMargin-mu)/s);pa=1-ph;pp=0;}
+ return {ph,pa,pp};
+}
+function predict(away,home,homeSpread,homePrice,awayPrice){
+ if(away===home||!TEAMS.includes(away)||!TEAMS.includes(home))throw Error('Select different valid teams.');
+ if(!Number.isFinite(homeSpread)||!Number.isInteger(homeSpread*2))throw Error('Enter a spread in half-point increments.');
+ if(!validPrice(homePrice)||!validPrice(awayPrice))throw Error('Enter valid American odds (+100 or higher / -100 or lower).');
+ const marketMargin=-homeSpread;
+ const residual=beta[0]+beta[1+TEAMS.indexOf(home)]-beta[1+TEAMS.indexOf(away)];
+ const projected=marketMargin+residual;
+ const p=coverProbs(projected,marketMargin);
+ const evh=p.ph*netProfit(homePrice)-p.pa;
+ const eva=p.pa*netProfit(awayPrice)-p.ph;
+ const homeSelected=residual>=0;
+ const side=homeSelected?'HOME':'AWAY';
+ const pWin=homeSelected?p.ph:p.pa, pLose=homeSelected?p.pa:p.ph;
+ const ev=homeSelected?evh:eva, price=homeSelected?homePrice:awayPrice;
+ return {away,home,homeSpread,homePrice,awayPrice,side,pickTeam:homeSelected?home:away,pickSpread:homeSelected?homeSpread:-homeSpread,
+  pickPrice:price,projectedMargin:round(projected),marketMargin:round(marketMargin),residual:round(residual),
+  pHome:round(p.ph,6),pAway:round(p.pa,6),pPush:round(p.pp,6),pChosenCover:round(pWin,6),pChosenLose:round(pLose,6),
+  pConditionalCover:round(pWin/(pWin+pLose),6),evPerUnit:round(ev,6),qualifiesResearchGate:ev>=.02&&Math.abs(residual)>=1.25,
+  model:VERSION,trainingGames:HISTORY.length};
+}
+let current=null;
+for(const id of ['away','home'])$(id).innerHTML='<option value="">Choose</option>'+TEAMS.map(t=>`<option value="${t}">${t}</option>`).join('');
+function esc(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+function percent(x){return (100*x).toFixed(1)+'%';}
+function quoteDate(v){if(!v)return null;let d=new Date(v);return Number.isFinite(d.getTime())?d.toISOString():null;}
+function read(){return {away:$('away').value,home:$('home').value,homeSpread:Number($('spread').value),homePrice:Number($('hp').value),awayPrice:Number($('ap').value),book:$('source').value.trim()||'unspecified / manual',kickoffUtc:quoteDate($('kickoff').value),quoteUtc:quoteDate($('quote').value)};}
+function calculate(){
+ $('freeze').disabled=true;current=null;
+ try{
+  const raw=read();
+  if(!$('spread').value.trim()||!$('hp').value.trim()||!$('ap').value.trim())throw Error('Enter a spread and prices for both sides.');
+  const p=predict(raw.away,raw.home,raw.homeSpread,raw.homePrice,raw.awayPrice);
+  current={...p,...{book:raw.book,kickoffUtc:raw.kickoffUtc,quoteUtc:raw.quoteUtc}};
+  let kickoffValid=raw.kickoffUtc&&Date.parse(raw.kickoffUtc)>Date.now();
+  $('freeze').disabled=!kickoffValid;
+  $('result').innerHTML=`<div class="small">MODEL ATS SIDE · UNVALIDATED RESEARCH</div><div class="pick">${esc(p.pickTeam)} ${p.pickSpread>0?'+':''}${p.pickSpread} <span style="font-size:15px;color:#a6d6eb">(${p.pickPrice>0?'+':''}${p.pickPrice})</span></div>
+  <div class="stats"><div class="stat"><span>Projected home margin</span><strong>${p.projectedMargin>0?'+':''}${p.projectedMargin}</strong></div><div class="stat"><span>Home residual vs line</span><strong>${p.residual>0?'+':''}${p.residual} pts</strong></div>
+  <div class="stat"><span>Chosen cover (non-push)</span><strong>${percent(p.pConditionalCover)}</strong></div><div class="stat"><span>Push probability</span><strong>${percent(p.pPush)}</strong></div>
+  <div class="stat"><span>Estimated return / unit</span><strong>${percent(p.evPerUnit)}</strong></div><div class="stat"><span>Research EV threshold</span><strong>${p.qualifiesResearchGate?'Passed':'Not passed'}</strong></div></div>
+  <div class="status">Research calculation only. ${kickoffValid?'You may freeze this as a local pregame snapshot.':'Enter a future kickoff time to enable pregame lock.'} No bookmaker quote independently verified.</div>`;
+ }catch(err){$('result').textContent=err.message||String(err);}
+}
+const KEY='sports_edge_r3_ops_frozen_v01';
+function saved(){try{return JSON.parse(localStorage.getItem(KEY)||'[]');}catch(_){return [];}}
+function renderLog(){const arr=saved();$('log').innerHTML=arr.length?arr.map(r=>`<li><b>${esc(r.pickTeam)} ${r.pickSpread>0?'+':''}${r.pickSpread}</b> · ${esc(r.away)} @ ${esc(r.home)} · ${esc(r.book)} · frozen ${esc(r.frozenAtUtc)} UTC</li>`).join(''):'<li>No frozen picks on this device yet.</li>';}
+function lock(){
+ if(!current||!current.kickoffUtc||Date.parse(current.kickoffUtc)<=Date.now()){alert('Pregame lock requires a future kickoff. Recalculate with an upcoming kickoff.');return;}
+ const all=saved();
+ const entry={...current,frozenAtUtc:new Date().toISOString(),quoteVerification:'MANUAL_UNVERIFIED',provenance:'R3 reconstructed, current-season archived training only'};
+ if(all.some(x=>x.away===entry.away&&x.home===entry.home&&x.kickoffUtc===entry.kickoffUtc)){alert('A pregame pick for this matchup and kickoff is already frozen.');return;}
+ all.push(entry);localStorage.setItem(KEY,JSON.stringify(all));$('freeze').disabled=true;renderLog();
+ $('result').insertAdjacentHTML('beforeend','<div class="status">Frozen locally. Export the log to retain a durable copy.</div>');
+}
+function download(file,content,type){const blob=new Blob([content],{type});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=file;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),1000);}
+function exportJSON(){download('SEL_R3_frozen_pregame_picks.json',JSON.stringify({model:VERSION,exportedAtUtc:new Date().toISOString(),records:saved()},null,2),'application/json');}
+function exportCSV(){let arr=saved(),cols=['model','away','home','homeSpread','homePrice','awayPrice','pickTeam','pickSpread','pickPrice','projectedMargin','residual','pChosenCover','pPush','evPerUnit','qualifiesResearchGate','book','kickoffUtc','quoteUtc','frozenAtUtc','quoteVerification'];
+ const cell=x=>'"'+String(x??'').replace(/"/g,'""')+'"';const lines=[cols.map(cell).join(',')].concat(arr.map(r=>cols.map(c=>cell(r[c])).join(',')));
+ download('SEL_R3_frozen_pregame_picks.csv',lines.join('\r\n'),'text/csv');}
+$('calc').addEventListener('click',calculate);
+$('freeze').addEventListener('click',lock);
+$('clear').addEventListener('click',()=>{current=null;$('result').textContent='Select teams and enter the sportsbook line, then calculate.';$('freeze').disabled=true;});
+$('export').addEventListener('click',exportJSON);
+$('csv').addEventListener('click',exportCSV);
+for(const id of ['away','home','spread','hp','ap','source','kickoff','quote'])$(id).addEventListener('input',()=>{$('freeze').disabled=true;current=null;});
+renderLog();
+</script></body></html>
