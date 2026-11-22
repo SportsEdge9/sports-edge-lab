@@ -428,9 +428,42 @@
       "quoteObservedAtUtc": "2026-11-21T15:02:35Z",
       "quoteVerification": "API_RECEIVED_PREKICKOFF",
       "source": "OddsPapi v4 / odds"
+    },
+    {
+      "away": "CIN",
+      "awaySpreadPrice": -139,
+      "bookmaker": "fanduel",
+      "bookmakerQuoteTimeAway": "2026-11-22T02:12:46.728Z",
+      "bookmakerQuoteTimeHome": "2026-11-22T02:12:46.728Z",
+      "fixtureId": "id1400003171516056",
+      "frozenAtUtc": "2026-11-22T15:53:46Z",
+      "home": "WAS",
+      "homeSpread": 4.5,
+      "homeSpreadPrice": 108,
+      "kickoffUtc": "2026-11-24T01:15:00Z",
+      "modelOutput": {
+        "certifiedEdge": false,
+        "coverProbabilityConditional": 0.555537,
+        "estimatedEVPerUnit": -0.044796,
+        "marketHomeMargin": -4.5,
+        "model": "R3_OPS_RECON_V0.1_2026_ONLY",
+        "passesResearchThreshold": false,
+        "pickPrice": -139,
+        "pickSpread": -4.5,
+        "pickTeam": "CIN",
+        "projectedHomeMargin": -6.385,
+        "pushProbability": 0.0,
+        "residualHomePoints": -1.885,
+        "side": "AWAY",
+        "trainingGames": 149
+      },
+      "provenance": "R3 reconstructed; prospective GitHub Actions capture",
+      "quoteObservedAtUtc": "2026-11-22T15:53:46Z",
+      "quoteVerification": "API_RECEIVED_PREKICKOFF",
+      "source": "OddsPapi v4 / odds"
     }
   ],
-  "generatedAtUtc": "2026-11-21T15:02:35Z",
+  "generatedAtUtc": "2026-11-22T15:53:46Z",
   "model": "R3_OPS_RECON_V0.1_2026_ONLY",
   "notes": "Frozen picks never overwritten; no postkickoff inference; sample is not a validated profitable model.",
   "schema": "sel.r3.pregame.v1",
@@ -441,76 +474,83 @@
       "fixtureId": "id1400003171516036",
       "home": "BUF",
       "kickoffUtc": "2026-11-22T18:00:00Z",
-      "status": "FROZEN"
+      "status": "ALREADY_FROZEN"
     },
     {
       "away": "BAL",
       "fixtureId": "id1400003171516038",
       "home": "CAR",
       "kickoffUtc": "2026-11-22T18:00:00Z",
-      "status": "FROZEN"
+      "status": "ALREADY_FROZEN"
     },
     {
       "away": "NO",
       "fixtureId": "id1400003171516040",
       "home": "CHI",
       "kickoffUtc": "2026-11-22T18:00:00Z",
-      "status": "FROZEN"
+      "status": "ALREADY_FROZEN"
     },
     {
       "away": "TEN",
       "fixtureId": "id1400003171516042",
       "home": "DAL",
       "kickoffUtc": "2026-11-22T18:00:00Z",
-      "status": "FROZEN"
+      "status": "ALREADY_FROZEN"
     },
     {
       "away": "TB",
       "fixtureId": "id1400003171516044",
       "home": "DET",
       "kickoffUtc": "2026-11-22T18:00:00Z",
-      "status": "FROZEN"
+      "status": "ALREADY_FROZEN"
     },
     {
       "away": "ARI",
       "fixtureId": "id1400003171516046",
       "home": "KC",
       "kickoffUtc": "2026-11-22T18:00:00Z",
-      "status": "FROZEN"
+      "status": "ALREADY_FROZEN"
     },
     {
       "away": "PIT",
       "fixtureId": "id1400003171516054",
       "home": "PHI",
       "kickoffUtc": "2026-11-22T18:00:00Z",
-      "status": "FROZEN"
+      "status": "ALREADY_FROZEN"
     },
     {
       "away": "NYJ",
       "fixtureId": "id1400003171516050",
       "home": "LAC",
       "kickoffUtc": "2026-11-22T21:05:00Z",
-      "status": "FROZEN"
+      "status": "ALREADY_FROZEN"
     },
     {
       "away": "JAX",
       "fixtureId": "id1400003171516048",
       "home": "NYG",
       "kickoffUtc": "2026-11-22T21:25:00Z",
-      "status": "FROZEN"
+      "status": "ALREADY_FROZEN"
     },
     {
       "away": "LV",
       "fixtureId": "id1400003171516052",
       "home": "DEN",
       "kickoffUtc": "2026-11-22T21:25:00Z",
-      "status": "FROZEN"
+      "status": "ALREADY_FROZEN"
     },
     {
       "away": "MIN",
       "fixtureId": "id1400003171489040",
       "home": "SF",
       "kickoffUtc": "2026-11-23T01:20:00Z",
+      "status": "ALREADY_FROZEN"
+    },
+    {
+      "away": "CIN",
+      "fixtureId": "id1400003171516056",
+      "home": "WAS",
+      "kickoffUtc": "2026-11-24T01:15:00Z",
       "status": "FROZEN"
     }
   ]
